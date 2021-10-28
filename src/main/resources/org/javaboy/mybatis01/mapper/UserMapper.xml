@@ -13,12 +13,12 @@
 
     <insert id = "addUser" parameterType="org.javaboy.mybatis01.model.User">
         <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE">
-            select uuid();
+            select last_insert_id();
         </selectKey>
         insert into user (id,username,address) values(#{id},#{username},#{address});
     </insert>
 
-    <insert id = "addUser2" parameterType="org.javaboy.mybatis01.model.User">
+    <insert id = "addUser2" parameterType="org.javaboy.mybatis01.model.User" useGeneratedKeys="true" keyProperty="id">
         insert into user (id,username,address) value (#{z.id},#{z.username},#{z.address});
     </insert>
 

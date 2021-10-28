@@ -1,7 +1,9 @@
 package org.javaboy;
 
 import org.apache.ibatis.session.SqlSession;
+import org.javaboy.mybatis01.mapper.BookMapper;
 import org.javaboy.mybatis01.mapper.UserMapper;
+import org.javaboy.mybatis01.model.BookUser;
 import org.javaboy.mybatis01.model.User;
 import org.javaboy.mybatis01.utils.SqlSessionFactoryUtils;
 import org.junit.After;
@@ -13,10 +15,12 @@ import java.util.UUID;
 
 public class MyTest {
     private SqlSession sqlSession;
+    private BookMapper bookMapper;
 
     @Before
     public void before(){
         sqlSession = SqlSessionFactoryUtils.getInstance().openSession();
+        bookMapper = sqlSession.getMapper(BookMapper.class);
     }
 
     @Test
@@ -85,6 +89,7 @@ public class MyTest {
         System.out.println(itboy123);
         sqlSession.commit();
     }
+
     @Test
     public void addUser2(){
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
@@ -94,6 +99,31 @@ public class MyTest {
         user.setAddress("sdsda.ddsd");
         Integer integer = mapper.addUser2(user);
         System.out.println(integer);
+    }
+
+    @Test
+    public void getAllBook(){
+        List<BookUser> allBook = bookMapper.getAllBook();
+        for (BookUser bookUser : allBook) {
+            System.out.println(bookUser);
+        }
+    }
+
+    @Test
+    public void getBookByNameOrAuthor(){
+        BookUser bookUser1 = new BookUser(123,"zyy",2);
+        List<BookUser> author = bookMapper.getBookByNameOrAuthor(bookUser1);
+        for (BookUser bookUser : author) {
+            System.out.println(bookUser);
+        }
+    }
+
+    @Test
+    public void updateBook(){
+        BookUser user = new BookUser(1, "zs", 123);
+        Integer book = bookMapper.updateBook(user);
+        System.out.println(book);
+        sqlSession.commit();
     }
     @After
     public void after(){

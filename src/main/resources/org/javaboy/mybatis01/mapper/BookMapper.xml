@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.javaboy.mybatis01.mapper.BookMapper">
+    <resultMap id="BookMap" type="org.javaboy.mybatis01.model.BookUser">
+<!--        <constructor>-->
+<!--            <idArg column="id" name = "arg0" javaType="java.lang.Long" jdbcType="BIGINT"/>-->
+<!--            <arg column="username" name = "arg1" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--            <arg column="address" name = "arg2" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        </constructor>-->
+        <constructor>
+            <idArg column="id" name = "id"/>
+            <arg column="name" name="name"/>
+            <arg column="aid" name="author"/>
+        </constructor>
+    </resultMap>
+    <select id="getBookByNameOrAuthor" resultMap="BookMap" parameterType="org.javaboy.mybatis01.model.BookUser">
+        select * from book
+        <where>
+        <choose>
+            <when test = "name != null and name != '' ">
+                and name = #{name}
+            </when>
+        </choose>
+        </where>
+    </select>
+
+    <select id="getAllBook" resultMap="BookMap">
+        select * from book;
+    </select>
+
+    <update id="updateBook" parameterType="org.javaboy.mybatis01.model.BookUser">
+        update book
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+
+            <if test="author != null and author != ''">
+                aid = #{author},
+            </if>
+        </trim>
+        where id = #{id};
+    </update>
+</mapper>
